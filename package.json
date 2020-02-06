@@ -1,0 +1,29 @@
+{
+  "name": "node-sitemap-generator",
+  "description": "Generate a sitemap file from command line",
+  "version": "0.5.0",
+  "repository": "https://github.com/jvidalv/node-sitemap-generator",
+  "author": "Josep Vidal <josepvidalvidal@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "sitemap",
+    "node",
+    "generator"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "homepage": "https://github.com/jvidalv/node-sitemap-generator",
+  "license": "MIT",
+  "bin": {
+    "sitemap": "./bin/cli.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^2.1.1"
+  },
+  "dependencies": {
+    "commander": "^4.1.1"
+  }
+}
