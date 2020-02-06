@@ -15,6 +15,7 @@ class Sitemapper {
         this.wait = wait;
         this.page = null;
         this.currentPage = null;
+        this.errors = [];
     }
 
     /**
@@ -29,22 +30,23 @@ class Sitemapper {
 
     /**
      * Parses all the urls
-     * @returns {Promise<void>}
+     * @returns {Promise<?Puppeteer.Response>}
      */
-    async parse()
+    async parse(url)
     {
-        this.filterUrls().map( async (url) => this.currentPage = await this.page.goto(url) && await this.urlFinder());
-    }
-
-    async urlFinder()
-    {
-        await timeout(this.wait);
-        console.log(this.currentPage);
-    }
-
-    filterUrls()
-    {
-        return this.urls.filter(url => true)
+        return this.page.goto(url).then( async () => {
+            await timeout(this.wait);
+            this.urls = [...await this.page.evaluate(() =>
+                Array.from(document.querySelectorAll("a,link[rel='alternate']")).map(anchor => {
+                    if (anchor.href.baseVal) {
+                        const a = document.createElement("a");
+                        a.href = anchor.href.baseVal;
+                        return a.href;
+                    }
+                    return anchor.href;
+                })
+            ), ...this.urls]
+        });
     }
 
 }
