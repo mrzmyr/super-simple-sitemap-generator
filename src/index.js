@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 const program = require('commander');
 const pkg = require('../package.json');
 const fs = require('fs');
@@ -37,27 +36,47 @@ program.parse(process.argv);
 async function run() {
 
     if (program.args.length < 1) {
-        throw 'At least one parameter (url to parse) is required. For more info write sitemap --help.';
+        throw 'One parameter (url to parse) is required. For more info write sitemap --help.';
     }
 
     const mapper = new Sitemapper(program.w, ...program.args);
     await mapper.init();
-
-    await Promise.all(mapper.urls.map(async url => {
+    console.log(mapper.browser)
+    await Promise.all(mapper.baseUrls.map(async url => {
             try {
                 await mapper.parse(url);
             } catch (error) {
-                errors.push(`${url} could not be parsed`)
+                mapper.errors.push(`${url} could not be parsed`)
             }
         })
     );
 
-    if (errors.length) {
-        console.error(errors.join('. '));
+    if (mapper.errors.length) {
+        console.error(mapper.errors.join('. '));
         process.exit(2);
     }
 
+    console.log(mapper.urls)
+    while (mapper.urls.length !== 0) {
+        console.log(mapper.urls)
+        await Promise.all(mapper.urls.map(async url => {
+                try {
+                    await mapper.parse(url);
+                } catch (error) {
+                    mapper.removeUrlFromUrls(url);
+                    mapper.errors.push(`${url} could not be parsed`)
+                }
+            })
+        );
 
+    }
+
+    if (mapper.errors.length) {
+        console.error(mapper.errors.join('. '));
+        process.exit(2);
+    }
+
+    process.exit(1);
     //console.log(site);
     /*browser = await puppeteer.launch();
     await parseUrl(base_page);
