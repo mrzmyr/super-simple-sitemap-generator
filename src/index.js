@@ -3,10 +3,8 @@ const program = require('commander');
 const pkg = require('../package.json');
 const fs = require('fs');
 const url = require("url");
-const UrlUtils = require("./utils/urls");
 const Sitemapper = require("./models/Sitemapper");
 
-let base_page = 'http://localhost:3000/';
 let urlsToParse = [];
 let urlsAlreadyParsed = [];
 let browser;

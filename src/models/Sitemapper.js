@@ -32,8 +32,8 @@ class Sitemapper {
          * puppeteer current open page
          * @type {null}
          */
-        this.browser;
         this.page = null;
+        this.browser;
         /**
          * Current page being parsed
          * @type {null}
@@ -63,6 +63,7 @@ class Sitemapper {
         console.log(url)
         await this.page.goto(url);
         console.log(this.page)
+
         const doit = async () => {
 
             if (this.parsedUrls.includes(url)) {
