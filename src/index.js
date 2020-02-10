@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 const program = require('commander');
 const pkg = require('../package.json');
-const fs = require('fs');
 const url = require("url");
 const Sitemapper = require("./models/Sitemapper");
 
