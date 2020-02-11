@@ -27,7 +27,7 @@ class Sitemapper {
         /**
          * Milliseconds to wait on each parse for fetches and so to complete
          */
-        this.wait = wait;
+        this.wait = wait ? wait : 1500;
         /**
          * puppeteer current open page
          * @type {null}
@@ -60,14 +60,14 @@ class Sitemapper {
      */
     async parse(url) {
         this.page = await this.browser.newPage();
-        console.log(url)
+
         await this.page.goto(url);
-        console.log(this.page)
 
-        const doit = async () => {
+        const begin = async () => {
 
+            // BORRAR TOTS LOS QUE YA SAN PARSEJAT I MIRAR DE COM FERHO ABAIX!!
             if (this.parsedUrls.includes(url)) {
-                this.urls.splice(1, 0, url);
+                this.removeUrlFromUrls(url);
                 return;
             }
 
@@ -84,14 +84,18 @@ class Sitemapper {
                 })
             ), ...this.urls];
 
+            this.removeRepeatedUrls();
             this.filterUrls();
             this.removeUrlFromUrls(url);
             this.parsedUrls.push(url);
         };
 
-        return doit();
+        return begin();
     }
-
+    /**
+     * Remove an url from the url array
+     * @param url
+     */
     removeUrlFromUrls(url) {
         const index = this.urls.findIndex((element) => element === url);
         if (index !== -1) {
@@ -99,8 +103,19 @@ class Sitemapper {
         }
     }
 
+    /**
+     * Creates a new array without the repeated elements
+     */
+    removeRepeatedUrls()
+    {
+        this.urls =  [...new Set(this.urls)]
+    }
+
+    /**
+     * Filters the urls by different conditions
+     */
     filterUrls() {
-        this.urls = UrlUtils.filterUrls(UrlUtils.removeDuplicatedUrls(this.urls), this.baseUrls[0])
+        this.urls = this.urls.filter((url) => UrlUtils.urlContainsPage(url, this.baseUrls[0]) && !UrlUtils.isUrlAnAnchor(url));
     }
 }
 

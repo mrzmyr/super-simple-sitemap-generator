@@ -1,14 +1,5 @@
 
 /**
- * Filters our urlsToParse
- */
-function filterUrls(urls, page){
-    return urls.filter(url => {
-        return urlContainsPage(url, page) && !isUrlAnAnchor(url);
-    })
-}
-
-/**
  * Checks if url contains the base page, we don't want external urls
  * @param url
  * @param page
@@ -28,19 +19,9 @@ function isUrlAnAnchor(url){
 }
 
 /**
- * Removes duplicated urls
- */
-function removeDuplicatedUrls($urls)
-{
-    return [...new Set($urls)]
-}
-
-/**
  * Object
  */
 module.exports = UrlUtils = {
-    filterUrls : ($urls) => filterUrls($urls),
-    removeDuplicatedUrls : ($urls) => removeDuplicatedUrls($urls),
-    urlContainsPage : ($url) => urlContainsPage($url),
-    isUrlAnAnchor : ($url) => isUrlAnAnchor($url),
+    urlContainsPage : (url, page) => urlContainsPage(url, page),
+    isUrlAnAnchor : (url) => isUrlAnAnchor(url),
 };

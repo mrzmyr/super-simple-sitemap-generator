@@ -38,7 +38,7 @@ async function run() {
 
     const mapper = new Sitemapper(program.w, ...program.args);
     await mapper.init();
-    console.log(mapper.browser)
+
     await Promise.all(mapper.baseUrls.map(async url => {
             try {
                 await mapper.parse(url);
@@ -53,20 +53,26 @@ async function run() {
         process.exit(2);
     }
 
-    console.log(mapper.urls)
-    while (mapper.urls.length !== 0) {
-        console.log(mapper.urls)
-        await Promise.all(mapper.urls.map(async url => {
-                try {
-                    await mapper.parse(url);
-                } catch (error) {
-                    mapper.removeUrlFromUrls(url);
-                    mapper.errors.push(`${url} could not be parsed`)
-                }
-            })
-        );
-
+    while(mapper.urls.length !== 0){
+        console.log( mapper.urls.length);
+        await mapper.parse(mapper.urls[0]);
     }
+
+    // while (mapper.urls.length !== 0) {
+    //     await Promise.all(mapper.urls.map(async url => {
+    //             try {
+    //                 await mapper.parse(url);
+    //                 console.log(mapper.parsedUrls)
+    //                 console.log(mapper.urls)
+    //
+    //             } catch (error) {
+    //                 mapper.removeUrlFromUrls(url);
+    //                 mapper.errors.push(`${url} could not be parsed`)
+    //             }
+    //         })
+    //     );
+    //
+    // }
 
     if (mapper.errors.length) {
         console.error(mapper.errors.join('. '));
@@ -74,40 +80,6 @@ async function run() {
     }
 
     process.exit(1);
-    //console.log(site);
-    /*browser = await puppeteer.launch();
-    await parseUrl(base_page);
-    removeDuplicatedUrls();
-    filterUrls();
-    for(let i = 0; i < urlsToParse.length; i++){
-        console.log(urlsToParse[i]);
-        await parseUrl(urlsToParse[i]);
-        removeDuplicatedUrls();
-        filterUrls();
-        console.log(urlsAlreadyParsed)
-    }
-
-    await browser.close();*/
-}
-
-async function parseUrl(url) {
-    const page = await browser.newPage();
-    await page.goto(url);
-
-    await timeout(1500);
-
-    urlsToParse = [...await page.evaluate(() =>
-        Array.from(document.querySelectorAll("a,link[rel='alternate']")).map(anchor => {
-            if (anchor.href.baseVal) {
-                const a = document.createElement("a");
-                a.href = anchor.href.baseVal;
-                return a.href;
-            }
-            return anchor.href;
-        })
-    ), ...urlsToParse];
-
-    urlsAlreadyParsed.push(url);
 }
 
 
