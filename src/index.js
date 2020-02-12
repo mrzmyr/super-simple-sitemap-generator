@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 const program = require('commander');
 const pkg = require('../package.json');
-const url = require("url");
+const fs = require("fs");
+
 const Sitemapper = require("./models/Sitemapper");
 
 let urlsToParse = [];
@@ -15,7 +16,8 @@ program
     .version(pkg.version)
     .usage('[options] <url>')
     .option('--wait <miliseconds>', 'specify the time to wait before starting to parse the page (for CSR pages) (default 1500)', 1500)
-    .option('--no-deep <boolean>', 'blocks the iterators so only parses main urls, and not the ones found inside of them', false);
+    //.option('--no-deep <boolean>', 'blocks the iterators so only parses main urls, and not the ones found inside of them', false)
+    .option('--limit <number>', 'specify the limit of urls to parse', 999999);
 
 
 program.on('--help', () => {
@@ -36,14 +38,15 @@ async function run() {
         throw 'One parameter (url to parse) is required. For more info write sitemap --help.';
     }
 
-    const mapper = new Sitemapper(program.w, ...program.args);
+    const mapper = new Sitemapper(program.wait, program.limit, ...program.args);
     await mapper.init();
 
     await Promise.all(mapper.baseUrls.map(async url => {
             try {
+                console.log(`Parsing ${url}...`);
                 await mapper.parse(url);
             } catch (error) {
-                mapper.errors.push(`${url} could not be parsed`)
+                mapper.errors.push(`${url} could not be parsed!`)
             }
         })
     );
@@ -53,30 +56,29 @@ async function run() {
         process.exit(2);
     }
 
-    while(mapper.urls.length !== 0){
-        console.log( mapper.urls.length);
-        await mapper.parse(mapper.urls[0]);
+    // Parse all the urls that are found and valid in each page
+    while(mapper.urls.length !== 0 && mapper.parsedUrls.length <= mapper.limit){
+        try {
+            console.log(`Parsing ${mapper.urls[0]}...`);
+            await mapper.parse(mapper.urls[0]);
+        } catch (error) {
+            mapper.errors.push(`${mapper.urls[0]} could not be parsed!`)
+        }
     }
-
-    // while (mapper.urls.length !== 0) {
-    //     await Promise.all(mapper.urls.map(async url => {
-    //             try {
-    //                 await mapper.parse(url);
-    //                 console.log(mapper.parsedUrls)
-    //                 console.log(mapper.urls)
-    //
-    //             } catch (error) {
-    //                 mapper.removeUrlFromUrls(url);
-    //                 mapper.errors.push(`${url} could not be parsed`)
-    //             }
-    //         })
-    //     );
-    //
-    // }
 
     if (mapper.errors.length) {
         console.error(mapper.errors.join('. '));
         process.exit(2);
+    }
+
+    try {
+
+        mapper.generateXml();
+        fs.writeFileSync("sitemap.xml", mapper.xml);
+        console.log('Sitemap.xml generated successfully ✔');
+
+    } catch (error) {
+        mapper.errors.push(`There was an error generating the XML file!`);
     }
 
     process.exit(1);

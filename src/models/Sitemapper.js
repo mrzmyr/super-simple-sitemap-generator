@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const timeout = require('../utils/timeout');
 const UrlUtils = require('../utils/urls');
+const builder = require('xmlbuilder');
 
 /**
  *
@@ -9,9 +10,10 @@ class Sitemapper {
 
     /**
      * @param wait number
+     * @param limit number
      * @param urls array
      */
-    constructor(wait, ...urls) {
+    constructor(wait, limit, ...urls) {
         /**
          * @type {*[]} of urls
          */
@@ -27,12 +29,20 @@ class Sitemapper {
         /**
          * Milliseconds to wait on each parse for fetches and so to complete
          */
-        this.wait = wait ? wait : 1500;
+        this.wait = wait;
+        /**
+         * Milliseconds to wait on each parse for fetches and so to complete
+         */
+        this.limit = parseInt(limit);
         /**
          * puppeteer current open page
          * @type {null}
          */
         this.page = null;
+        /**
+         * puppeteer current open page
+         * @type {null}
+         */
         this.browser;
         /**
          * Current page being parsed
@@ -44,6 +54,16 @@ class Sitemapper {
          * @type {*[]}
          */
         this.errors = [];
+        /**
+         * XML file generated from all the parsed urls
+         * @type {string}
+         */
+        this.xml = '';
+        /**
+         * Current date as yyyy-mm-dd
+         * @type {string}
+         */
+        this.currentDate = UrlUtils.getDate()
     }
 
     /**
@@ -65,7 +85,6 @@ class Sitemapper {
 
         const begin = async () => {
 
-            // BORRAR TOTS LOS QUE YA SAN PARSEJAT I MIRAR DE COM FERHO ABAIX!!
             if (this.parsedUrls.includes(url)) {
                 this.removeUrlFromUrls(url);
                 return;
@@ -88,10 +107,26 @@ class Sitemapper {
             this.filterUrls();
             this.removeUrlFromUrls(url);
             this.parsedUrls.push(url);
+            this.removeParsedUrlsFromUrls();
         };
 
         return begin();
     }
+
+
+    generateXml() {
+
+        const tempXml = builder.create('urlset').att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+
+        for (let url of this.parsedUrls) {
+            tempXml.e('url')
+                .e('loc', url).up()
+                .e('lastmod', this.currentDate).up();
+        }
+
+        this.xml = tempXml.end({pretty: true});
+    }
+
     /**
      * Remove an url from the url array
      * @param url
@@ -104,11 +139,18 @@ class Sitemapper {
     }
 
     /**
+     * Remove urls from urls array if they are already parsed
+     * @param url
+     */
+    removeParsedUrlsFromUrls(url) {
+        this.urls = this.urls.filter((url) => !this.parsedUrls.includes(url));
+    }
+
+    /**
      * Creates a new array without the repeated elements
      */
-    removeRepeatedUrls()
-    {
-        this.urls =  [...new Set(this.urls)]
+    removeRepeatedUrls() {
+        this.urls = [...new Set(this.urls)]
     }
 
     /**
