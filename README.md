@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/jvidalv/react-vvlog/blob/master/assets/logo.png?raw=true">
+  <img src="https://github.com/jvidalv/node-simple-sitemap-generator/blob/master/assets/logo.png?raw=true">
 </p>
 
 **Node.js powered scrapper that navigates to the specified link and generates an ``sitemap.xml``,
