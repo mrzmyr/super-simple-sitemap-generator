@@ -3,9 +3,6 @@ const timeout = require('../utils/timeout');
 const UrlUtils = require('../utils/urls');
 const builder = require('xmlbuilder');
 
-/**
- *
- */
 class Sitemapper {
 
     /**
@@ -113,7 +110,9 @@ class Sitemapper {
         return begin();
     }
 
-
+    /**
+     * Generates the content of the XML
+     */
     generateXml() {
 
         const tempXml = builder.create('urlset').att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');

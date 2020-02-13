@@ -5,10 +5,6 @@ const fs = require("fs");
 
 const Sitemapper = require("./models/Sitemapper");
 
-let urlsToParse = [];
-let urlsAlreadyParsed = [];
-let browser;
-
 /**
  * Command line tooling
  */
