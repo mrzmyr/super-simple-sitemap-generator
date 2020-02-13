@@ -1,7 +1,8 @@
-<p align="center" style="margin:30px 0">
+<br/>
+<p align="center">
   <img src="https://github.com/jvidalv/node-simple-sitemap-generator/blob/master/assets/logo.png?raw=true">
 </p>
-
+<br/>
 A [node.js](https://nodejs.org/) powered scrapper 🔥 that iterates trough all the internal links of the specified url.
 **It works on CSR pages (React, Angular)** with dynamic urls.
 
