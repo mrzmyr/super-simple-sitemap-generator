@@ -1,4 +1,4 @@
-<p align="center" style="margin-bottom:20px">
+<p align="center" style="margin:30px 0">
   <img src="https://github.com/jvidalv/node-simple-sitemap-generator/blob/master/assets/logo.png?raw=true">
 </p>
 
@@ -21,7 +21,7 @@ Parameter | type | default | description
 --limit | integer | 999999 | Specify the limit of urls to parse before stopping the scrapper.
 
 #### Todo:
-* [ ] Make it a NPM package.
+* [x] Make it a NPM package.
 * [ ] Make wait time dynamic in response of fetches inside url.
 * [ ] New params that lets you specify how deep you want to go inside the url.
 * [ ] Integrate it as part of build process of a create-react-app.

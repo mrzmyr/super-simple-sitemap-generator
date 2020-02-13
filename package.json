@@ -1,9 +1,9 @@
 {
-  "name": "node-simple-sitemap-generator",
-  "description": "Generates a sitemap.xml file from command line with just an URL.",
+  "name": "simple-sitemap-generator",
+  "description": "Node.js powered scrapper that generates a sitemap.xml file from command line with just an URL.",
   "version": "1.0.0",
-  "repository": "https://github.com/jvidalv/node-simple-sitemap-generator",
-  "homepage": "https://github.com/jvidalv/node-sitemap-generator",
+  "repository": "https://github.com/jvidalv/simple-sitemap-generator",
+  "homepage": "https://github.com/jvidalv/sitemap-generator",
   "author": "Josep Vidal <josepvidalvidal@gmail.com>",
   "publishConfig": {
     "access": "public"
