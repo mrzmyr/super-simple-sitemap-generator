@@ -1,19 +1,19 @@
-<p align="center">
+<p align="center" style="margin-bottom:20px">
   <img src="https://github.com/jvidalv/node-simple-sitemap-generator/blob/master/assets/logo.png?raw=true">
 </p>
 
 A [node.js](https://nodejs.org/) powered scrapper 🔥 that iterates trough all the internal links of the specified url.
-It works on CSR pages (React, Angular) with dynamic urls.
+**It works on CSR pages (React, Angular)** with dynamic urls.
 
 Once it is done it generates a ``sitemap.xml`` file with all the urls found, ready to be uploaded to Google Search Console.
 
-#### Usage:
+### Usage:
 
 ``` bash
 $ sitemap https://vvlog.dev
 ```
 
-#### Params:
+### Params:
 
 Parameter | type | default | description
 --- | --- | --- | --- 
@@ -24,4 +24,4 @@ Parameter | type | default | description
 * [ ] Make it a NPM package.
 * [ ] Make wait time dynamic in response of fetches inside url.
 * [ ] New params that lets you specify how deep you want to go inside the url.
-
+* [ ] Integrate it as part of build process of a create-react-app.
