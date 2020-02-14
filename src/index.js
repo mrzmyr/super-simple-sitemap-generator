@@ -19,7 +19,7 @@ program
 program.on('--help', () => {
     console.log(`
   Example:
-    sitemap --w 2500 https://localhost:3000
+    sitemap --wait 2500 https://localhost:3000
 `)
 });
 
@@ -68,15 +68,15 @@ async function run() {
     }
 
     try {
-
         mapper.generateXml();
         fs.writeFileSync("sitemap.xml", mapper.xml);
         console.log('Sitemap.xml generated successfully ✔');
-
     } catch (error) {
         mapper.errors.push(`There was an error generating the XML file!`);
+        process.exit(2);
     }
 
+    console.log('Process finished, check folder for sitemap.xml 😉!');
     process.exit(1);
 }
 
