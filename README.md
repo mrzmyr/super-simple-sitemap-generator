@@ -23,7 +23,7 @@ $ sitemap https://vvlog.dev
 
 Parameter | type | default | description
 --- | --- | --- | --- 
---wait | integer | 1500 | Specify the time to wait (So the fetches are completed) before starting to parse the page (default 1500).
+--wait | integer | 1500 | Specify the time to wait (So the fetches are completed) before starting to parse the page (default 1500 milliseconds).
 --limit | integer | 999999 | Specify the limit of urls to parse before stopping the scrapper.
 
 #### Todo:
