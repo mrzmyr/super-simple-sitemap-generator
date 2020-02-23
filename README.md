@@ -31,3 +31,4 @@ Parameter | type | default | description
 * [ ] Make wait time dynamic in response of fetches inside url.
 * [ ] New params that lets you specify how deep you want to go inside the url.
 * [ ] Integrate it as part of build process of a create-react-app.
+* [ ] Clean old code.
