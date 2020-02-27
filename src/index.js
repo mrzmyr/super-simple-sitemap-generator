@@ -10,10 +10,12 @@ const Sitemapper = require("./models/Sitemapper");
  */
 program
     .version(pkg.version)
+    .name("sitemap")
     .usage('[options] <url>')
-    .option('--wait <miliseconds>', 'specify the time to wait before starting to parse the page (for CSR pages) (default 1500)', 1500)
+    .command('sitemap', 'Starts parsing the url.')
+    .option('-w, --wait <miliseconds>', 'specify the time to wait before starting to parse the page (for CSR pages) (default 1500)', 1500)
     //.option('--no-deep <boolean>', 'blocks the iterators so only parses main urls, and not the ones found inside of them', false)
-    .option('--limit <number>', 'specify the limit of urls to parse', 999999);
+    .option('-l, --limit <number>', 'specify the limit of urls to parse', 99999);
 
 
 program.on('--help', () => {
@@ -25,9 +27,6 @@ program.on('--help', () => {
 
 program.parse(process.argv);
 
-/**
- * @returns {Promise<void>}
- */
 async function run() {
 
     if (program.args.length < 1) {
@@ -53,7 +52,7 @@ async function run() {
     }
 
     // Parse all the urls that are found and valid in each page
-    while(mapper.urls.length !== 0 && mapper.parsedUrls.length <= mapper.limit){
+    while (mapper.urls.length !== 0 && mapper.parsedUrls.length <= mapper.limit) {
         try {
             console.log(`Parsing ${mapper.urls[0]}...`);
             await mapper.parse(mapper.urls[0]);
@@ -64,7 +63,7 @@ async function run() {
 
     if (mapper.errors.length) {
         console.error(mapper.errors.join('. '));
-        process.exit(2);
+        process.exit(1);
     }
 
     try {
@@ -76,7 +75,7 @@ async function run() {
         process.exit(2);
     }
 
-    console.log('Process finished, check folder for sitemap.xml 😉!');
+    console.log('Process finished, check folder for sitemap.xml ❤!');
     process.exit(1);
 }
 
