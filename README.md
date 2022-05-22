@@ -16,7 +16,7 @@ Once it is done it generates a ``sitemap.xml`` file with all the urls found, rea
 #### Usage:
 
 ``` bash
-$ sitemap https://vvlog.dev
+$ npx super-simple-sitemap-generator https://vvlog.dev
 ```
 
 #### Params:
@@ -27,7 +27,7 @@ Parameter | type | default | description
 --limit | integer | 999999 | Specify the limit of urls to parse before stopping the scrapper.
 
 #### Todo:
-* [x] Make it a NPM package.
+* [x] Make it a NPM package: https://www.npmjs.com/package/super-simple-sitemap-generator
 * [ ] Make wait time dynamic in response of fetches inside url.
 * [ ] New params that lets you specify how deep you want to go inside the url.
 * [ ] Integrate it as part of build process of a create-react-app.
